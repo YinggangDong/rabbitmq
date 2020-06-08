@@ -16,35 +16,38 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Consumer类(接口)是 简单队列的消费者
+ * WorkQueueConsumerB类(接口)是
  *
  * @author dongyinggang
- * @date 2020-06-02 10:37
+ * @date 2020-06-03 09:02
  **/
-public class Consumer {
+public class WorkQueueConsumerB {
 
-    private static final String TEST_SIMPLE_QUEUE = "test_simple_queue";
+    private static final String TEST_WORK_QUEUE = "test_work_queue";
 
     public static void main(String[] args) throws IOException, TimeoutException {
+        //获取连接
         Connection connection = ConnectionUtil.getConnection();
-
+        //获取channel
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare(TEST_SIMPLE_QUEUE, false, false, false, null);
+        channel.queueDeclare(TEST_WORK_QUEUE,false,false,false,null);
 
-        //定义队列的消费者
         DefaultConsumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body, StandardCharsets.UTF_8);
-                System.out.println(msg);
+                System.out.println("[" + Thread.currentThread().getStackTrace()[1].getClassName() + "]  :  " + msg);
 
             }
         };
 
         //监听队列
-        channel.basicConsume(TEST_SIMPLE_QUEUE, true, consumer);
+        channel.basicConsume(TEST_WORK_QUEUE, true, consumer);
 
+//        channel.close();
+//
+//        connection.close();
 
     }
 }

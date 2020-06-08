@@ -2,7 +2,7 @@
  * 版权所有 2019-2022山东新北洋信息技术股份有限公司
  * 保留所有权利。
  */
-package com.dyg.rabbitmq.workqueue;
+package com.dyg.rabbitmq.simple;
 
 import com.dyg.rabbitmq.util.ConnectionUtil;
 import com.rabbitmq.client.Channel;
@@ -17,12 +17,12 @@ import java.util.concurrent.TimeoutException;
  * @author dongyinggang
  * @date 2020-06-02 10:08
  **/
-public class Producer {
+public class SimpleProducer {
 
 
-    private static final String TEST_WORK_QUEUE = "test_work_queue";
+    private static final String TEST_SIMPLE_QUEUE = "test_simple_queue";
 
-    public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
+    public static void main(String[] args) throws IOException, TimeoutException {
 
         //获取一个连接
         Connection connection = ConnectionUtil.getConnection();
@@ -30,15 +30,13 @@ public class Producer {
         Channel channel = connection.createChannel();
 
         //声明队列
-        channel.queueDeclare(TEST_WORK_QUEUE, false, false, false, null);
+        channel.queueDeclare(TEST_SIMPLE_QUEUE,false,false,false,null);
 
-        for (int i = 0; i < 50; i++) {
-            String msg = "Hello workQueue" + i;
+        String msg = "Hello Simple !";
 
-            channel.basicPublish("", TEST_WORK_QUEUE, null, msg.getBytes());
+        channel.basicPublish("",TEST_SIMPLE_QUEUE,null,msg.getBytes());
 
-            Thread.sleep(i * 20);
-        }
+        System.out.println("--send msg:" + msg);
 
         channel.close();
 
