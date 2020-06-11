@@ -1,7 +1,3 @@
-/**
- * 版权所有 2019-2022山东新北洋信息技术股份有限公司
- * 保留所有权利。
- */
 package com.dyg.rabbitmq.workqueue;
 
 import com.dyg.rabbitmq.util.ConnectionUtil;
