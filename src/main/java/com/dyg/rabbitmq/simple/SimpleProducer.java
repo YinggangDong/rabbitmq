@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Producer类(接口)是 简单队列的生产者
+ * SimpleProducer类(接口)是 简单队列的生产者
  *
  * @author dongyinggang
  * @date 2020-06-02 10:08

@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Consumer类(接口)是 简单队列的消费者
+ * SimpleConsumer类(接口)是 简单队列的消费者
  *
  * @author dongyinggang
  * @date 2020-06-02 10:37
