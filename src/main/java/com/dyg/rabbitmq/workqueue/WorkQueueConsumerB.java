@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 /**
- * WorkQueueConsumerB类(接口)是
+ * WorkQueueConsumerB类(接口)是 工作队列(work queue)的消费者B
  *
  * @author dongyinggang
  * @date 2020-06-03 09:02
@@ -37,17 +37,22 @@ public class WorkQueueConsumerB {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body, StandardCharsets.UTF_8);
-                System.out.println("[" + Thread.currentThread().getStackTrace()[1].getClassName() + "]  :  " + msg);
-
+                System.out.println("[Consumer B]  Recv  :  " + msg);
+                //每过1s消费一条消息
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    System.out.println("[Consumer B]  down");
+                }
             }
         };
 
+        boolean autoAck = true;
         //监听队列
-        channel.basicConsume(TEST_WORK_QUEUE, true, consumer);
+        channel.basicConsume(TEST_WORK_QUEUE, autoAck, consumer);
 
-//        channel.close();
-//
-//        connection.close();
 
     }
 }

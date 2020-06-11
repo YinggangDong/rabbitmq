@@ -34,12 +34,13 @@ public class WorkQueueProducer {
 
         //向队列中丢入50条数据
         for (int i = 0; i < 50; i++) {
-            String msg = "Hello workQueue" + i;
+            String msg = "Hello workQueue " + i;
 
             channel.basicPublish("", TEST_WORK_QUEUE, null, msg.getBytes());
-            System.out.println("["+Thread.currentThread().getStackTrace()[1].getClassName()+"]  :  "+msg);
+            System.out.println("[Producer]  send:  " + msg);
             Thread.sleep(i * 20);
         }
+        System.out.println("[Producer]  send  End");
 
         channel.close();
 

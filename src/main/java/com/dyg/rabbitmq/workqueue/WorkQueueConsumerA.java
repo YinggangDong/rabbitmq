@@ -37,17 +37,22 @@ public class WorkQueueConsumerA {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body, StandardCharsets.UTF_8);
-                System.out.println("["+Thread.currentThread().getStackTrace()[1].getClassName()+"]  :  "+msg);
-
+                System.out.println("[Consumer A]  Recv  :  " + msg);
+                //每过2s消费一条消息
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    System.out.println("[Consumer A]  down");
+                }
             }
         };
 
-        //监听队列
-        channel.basicConsume(TEST_WORK_QUEUE, true, consumer);
+        //设置自动确认
+        boolean autoAck = true;
+        channel.basicConsume(TEST_WORK_QUEUE, autoAck, consumer);
 
-//        channel.close();
-//
-//        connection.close();
 
 
     }
