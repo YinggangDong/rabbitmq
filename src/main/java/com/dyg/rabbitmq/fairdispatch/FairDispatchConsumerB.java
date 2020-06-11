@@ -19,7 +19,7 @@ import java.util.concurrent.TimeoutException;
  **/
 public class FairDispatchConsumerB {
 
-    private static final String TEST_WORK_QUEUE = "test_work_queue";
+    private static final String TEST_FAIR_DISPATCH_QUEUE = "test_fair_dispatch_queue";
 
     public static void main(String[] args) throws IOException, TimeoutException {
         //获取连接
@@ -27,7 +27,10 @@ public class FairDispatchConsumerB {
         //获取channel
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare(TEST_WORK_QUEUE, false, false, false, null);
+        //设置持久化配置
+        boolean durable = true;
+        //声明队列
+        channel.queueDeclare(TEST_FAIR_DISPATCH_QUEUE, durable, false, false, null);
 
         channel.basicQos(1);
         DefaultConsumer consumer = new DefaultConsumer(channel) {
@@ -50,7 +53,7 @@ public class FairDispatchConsumerB {
         //关闭自动确认
         boolean autoAck = false;
         //监听队列
-        channel.basicConsume(TEST_WORK_QUEUE, autoAck, consumer);
+        channel.basicConsume(TEST_FAIR_DISPATCH_QUEUE, autoAck, consumer);
 
 
     }

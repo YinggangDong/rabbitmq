@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 public class FairDispatchProducer {
 
 
-    private static final String TEST_WORK_QUEUE = "test_work_queue";
+    private static final String TEST_FAIR_DISPATCH_QUEUE = "test_fair_dispatch_queue";
 
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
 
@@ -25,8 +25,10 @@ public class FairDispatchProducer {
         //从连接中获取一个通道
         Channel channel = connection.createChannel();
 
+        //设置持久化配置
+        boolean durable = true;
         //声明队列
-        channel.queueDeclare(TEST_WORK_QUEUE, false, false, false, null);
+        channel.queueDeclare(TEST_FAIR_DISPATCH_QUEUE, durable, false, false, null);
 
         /**
          *  每个消费者，发送确认消息之前，消息队列不发送下一个消息到消费者
@@ -40,7 +42,7 @@ public class FairDispatchProducer {
         for (int i = 0; i < 50; i++) {
             String msg = "Hello fairDispatch " + i;
 
-            channel.basicPublish("", TEST_WORK_QUEUE, null, msg.getBytes());
+            channel.basicPublish("", TEST_FAIR_DISPATCH_QUEUE, null, msg.getBytes());
             System.out.println("[FairDispatch Producer]  send:  " + msg);
             Thread.sleep(i * 20);
         }
