@@ -1,4 +1,4 @@
-package com.dyg.rabbitmq.simple;
+package com.dyg.rabbitmq.ps;
 
 import com.dyg.rabbitmq.util.ConnectionUtil;
 import com.rabbitmq.client.Channel;
@@ -7,16 +7,9 @@ import com.rabbitmq.client.Connection;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-/**
- * SimpleProducer类(接口)是 简单队列的生产者
- *
- * @author dongyinggang
- * @date 2020-06-02 10:08
- **/
-public class SimpleProducer {
+public class Publisher {
 
-
-    private static final String TEST_SIMPLE_QUEUE = "test_simple_queue";
+    private static final String EXCHANGE_NAME = "test_exchange_fanout";
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
@@ -25,18 +18,18 @@ public class SimpleProducer {
         //从连接中获取一个通道
         Channel channel = connection.createChannel();
 
-        //声明队列
-        channel.queueDeclare(TEST_SIMPLE_QUEUE,false,false,false,null);
+        //声明交换机
+        channel.exchangeDeclare(EXCHANGE_NAME,"fanout");
 
-        String msg = "Hello Simple !";
+        String msg = "Hello ps !";
 
-        channel.basicPublish("",TEST_SIMPLE_QUEUE,null,msg.getBytes());
+        //如果无绑定队列，则消息丢失，因为在mq中只有队列有存储消息的能力，交换机并不能存储消息
+        channel.basicPublish(EXCHANGE_NAME,"",null,msg.getBytes());
 
-        System.out.println("[Simple Producer] send:" + msg);
+        System.out.println("[Publisher] send:" + msg);
 
         channel.close();
 
         connection.close();
     }
-
 }

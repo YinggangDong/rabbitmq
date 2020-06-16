@@ -33,7 +33,7 @@ public class SimpleConsumer {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String msg = new String(body, StandardCharsets.UTF_8);
-                System.out.println(msg);
+                System.out.println("[Simple consumer] send: " + msg);
 
             }
         };
