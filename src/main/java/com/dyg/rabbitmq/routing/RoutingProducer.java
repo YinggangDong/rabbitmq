@@ -1,4 +1,4 @@
-package com.dyg.rabbitmq.ps;
+package com.dyg.rabbitmq.routing;
 
 import com.dyg.rabbitmq.util.ConnectionUtil;
 import com.rabbitmq.client.Channel;
@@ -7,9 +7,9 @@ import com.rabbitmq.client.Connection;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class Publisher {
+public class RoutingProducer {
 
-    private static final String EXCHANGE_NAME = "test_exchange_fanout";
+    private static final String EXCHANGE_NAME = "test_exchange_direct";
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
@@ -25,14 +25,20 @@ public class Publisher {
             2.fanout(不处理路由键):"fanout" 和他绑定的队列都可以收到消息
             3.Direct(处理路由键):"direct" 根据routingkey路由到对应队列
          */
-        channel.exchangeDeclare(EXCHANGE_NAME,"fanout");
+        channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-        String msg = "Hello ps !";
+        String msg = "Hello direct !";
 
-        //如果无绑定队列，则消息丢失，因为在mq中只有队列有存储消息的能力，交换机并不能存储消息
-        channel.basicPublish(EXCHANGE_NAME,"",null,msg.getBytes());
+        //设置路由键
+        String routingKey = "error";
+        channel.basicPublish(EXCHANGE_NAME, routingKey, null, msg.getBytes());
 
-        System.out.println("[RoutingProducer] send:" + msg);
+        System.out.println("[RoutingProducer] send:" + " [" + routingKey + "] " + msg);
+
+        String routingKey1 = "info";
+        channel.basicPublish(EXCHANGE_NAME, routingKey1, null, msg.getBytes());
+
+        System.out.println("[RoutingProducer] send:" + " [" + routingKey1 + "] " + msg);
 
         channel.close();
 
