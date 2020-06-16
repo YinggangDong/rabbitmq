@@ -29,7 +29,7 @@ public class RoutingProducer {
 
         String msg = "Hello direct !";
 
-        //设置路由键
+        //设置路由键，分别发送路由键为error和info的两条信息
         String routingKey = "error";
         channel.basicPublish(EXCHANGE_NAME, routingKey, null, msg.getBytes());
 
